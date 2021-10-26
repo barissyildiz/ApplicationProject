@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ApplicationProject</string>
+    <string name="menu_first_text">FORM LİSTESİ OLUŞTUR</string>
+    <string name="menu_second_text">FORMU LİSTELE</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="Open">Açık</string>
+    <string name="Close">Kapalı</string>
+    <string name="recyclerView_item_customername">GİRİNİZ</string>
 </resources>
