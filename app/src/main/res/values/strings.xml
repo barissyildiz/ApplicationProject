@@ -6,5 +6,22 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="Open">Açık</string>
     <string name="Close">Kapalı</string>
-    <string name="recyclerView_item_customername">GİRİNİZ</string>
+    <string name="recyclerView_item_customername_hint">LÜTFEN AD VE SOYADINIZI GİRİNİZ</string>
+    <string name="button_birthday">Doğum Tarihinizi Seçiniz</string>
+    <string name="radiobutton_male">Male</string>
+    <string name="radiobutton_female">Female</string>
+    <string name="phonenumber_hint">Lütfen telefon numaranızı giriniz</string>
+    <string name="vadelihesap">VADELİ HESAP</string>
+    <string name="vadesizhesap">VADESİZ HESAP</string>
+    <string name="fonhesabı">FON HESABI</string>
+    <string name="altındövizhesabı">ALTIN DÖVİZ HESABI</string>
+    <string name="yatırımhesabı">YATIRIM HESABI</string>
+    <string name="birthday">Doğum Tarihiniz : </string>
+    <string name="button_save">FORMU KAYDET</string>
+    <string name="fillingoutform">BOŞLUKLARI DOLDURUNUZ</string>
+    <string name="male">ERKEK</string>
+    <string name="female">BAYAN</string>
+    <string name="sharedprefencesfile">customersss</string>
+    <string name="sharedpreferenceskey">customer</string>
+    <string name="selectPicture">Lütfen Resim Seçiniz</string>
 </resources>

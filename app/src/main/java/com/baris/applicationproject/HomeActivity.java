@@ -9,16 +9,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.baris.applicationproject.ui.form.CreateFormFragment;
+import com.baris.applicationproject.ui.list.ListFormFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,6 +51,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        openGallery();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,5 +86,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void openGallery() {
+
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
+        if(EasyPermissions.hasPermissions(getApplicationContext(), perms)) {
+
+            Toast.makeText(getApplicationContext(),"izin alındı",Toast.LENGTH_LONG).show();
+
+        }else {
+
+            EasyPermissions.requestPermissions(
+                    this, // Bulunduğunuz Activity veya Fragment
+                    "Devam etmek için izin vermelisiniz.", // İstek için
+// bilgilendirme mesajı
+                    0, // Bizim belirlediğimiz Int tipinde bir istek kodu
+                    Manifest.permission.READ_EXTERNAL_STORAGE);// İzin almak istediğimiz yer
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
     }
 }

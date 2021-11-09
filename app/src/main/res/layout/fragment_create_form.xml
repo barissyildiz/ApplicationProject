@@ -1,12 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fragment1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/recyclerView_item_customername_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/customerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonBirthay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_birthday"/>
+
+        <TextView
+            android:id="@+id/textviewbirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+
+        <DatePicker
+            android:id="@+id/datePickerBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/buttonCustomerİmage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/selectPicture"
+            android:textSize="15sp"
+            android:background="@color/purple_500"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"/>
+
+        <ImageView
+            android:id="@+id/imageViewCustomerPicture"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radiobutton_male"
+                    android:layout_marginTop="10dp"
+                    android:checked="false"
+                    android:textSize="20dp" />
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radiobutton_female"
+                    android:layout_marginTop="20dp"
+                    android:checked="false"
+                    android:textSize="20dp" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vadelihesap"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vadesizhesap" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fonhesabı"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/altındövizhesabı"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/yatırımhesabı"
+                    android:layout_weight="1"/>
+
+
+
+        </LinearLayout>
+
+                <com.baris.applicationproject.customviews.PhoneCustomView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/formSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_save"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="120dp"
+            android:backgroundTint="@color/blue"/>
+
+                <Button
+                    android:id="@+id/deneme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="deneme"/>
+
+        </LinearLayout>
+
+</ScrollView>
