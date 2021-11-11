@@ -24,4 +24,6 @@
     <string name="sharedprefencesfile">customersss</string>
     <string name="sharedpreferenceskey">customer</string>
     <string name="selectPicture">Lütfen Resim Seçiniz</string>
+    <string name="allAccountsName">VADELİ/VADESİZ HESAPLAR</string>
+    <string name="selectAccount">HESAP SEÇİNİZ</string>
 </resources>

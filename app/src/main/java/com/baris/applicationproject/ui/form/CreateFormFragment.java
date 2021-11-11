@@ -4,8 +4,11 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -27,10 +30,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.baris.applicationproject.R;
+import com.baris.applicationproject.customviews.CustomerAccountView;
 import com.baris.applicationproject.customviews.PhoneCustomView;
 import com.baris.applicationproject.models.CustomerModel;
+import com.baris.applicationproject.ui.account.CustomerAccountFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -58,6 +67,14 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     Uri selectedImageUri;
     public static final int GALLERY_INTENT_CALLED = 1;
     public static final int GALLERY_KITKAT_INTENT_CALLED = 2;
+    private FragmentActivity myContext;
+    BroadcastReceiver broadcastReceiver;
+    String key = "customer";
+    String customerAccountNumber = "customerAccountNumber";
+    String branchNumber = "branchNumber";
+    String branchName = "branchName";
+    String customerBalance = "customerBalance";
+    String currency = "currency";
 
     @BindView(R.id.datePickerBirthday)
     DatePicker datePicker;
@@ -82,6 +99,24 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
     @BindView(R.id.imageViewCustomerPicture)
     ImageView imageViewCustomerPicture;
+
+    @BindView(R.id.fragmentTextViewCustomerAccount)
+    TextView textViewCustomerAccount;
+
+    @BindView(R.id.fragmentTextViewSelectedCustomerAccount)
+    TextView textViewSelectedCustomerAccount;
+
+    //@BindView(R.id.fragmentCustomerAccountView)
+    //CustomerAccountView customerAccountView;
+
+    @OnClick(R.id.fragmentTextViewCustomerAccount)
+    public void openCustomerAccount() {
+
+        Toast.makeText(getContext(),"22",Toast.LENGTH_LONG).show();
+        Fragment fragment = new CustomerAccountFragment();
+        FragmentManager fragmentManager = myContext.getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragmentHome, fragment).commit();
+    }
 
     @OnClick(R.id.buttonBirthay)
     public void buttonClick() {
@@ -194,11 +229,24 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         customerModelsList = gson.fromJson(json,type);
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(key,"1246");
+
+    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_create_form,container,false);
+
+        if (savedInstanceState != null) {
+            Toast.makeText(getContext(),savedInstanceState.getString(key),Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getContext(),"BOŞ",Toast.LENGTH_SHORT).show();
+        }
 
         return view;
     }
@@ -208,6 +256,8 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this,view);
+
+        takeArguments();
 
         phoneCustomView = new PhoneCustomView(view.getContext());
         radioGroupGender.setOnCheckedChangeListener(this);
@@ -301,11 +351,60 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
         });
 
-
          */
     }
 
+    private void takeArguments() {
 
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            String customerAccountNumberr = bundle.getString(customerAccountNumber);
+            String branchNumberr = bundle.getString(branchNumber);
+            String branchNamee = bundle.getString(branchName);
+            String balancee = bundle.getString(customerBalance);
+            String currencyy = bundle.getString(currency);
+
+            textViewSelectedCustomerAccount.setVisibility(View.VISIBLE);
+            textViewSelectedCustomerAccount.setText(branchNamee + "/" +balancee +currencyy);
+
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle bundle = intent.getExtras();
+                String message = bundle.getString("MESSAGE");
+
+                Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+            }
+
+        };
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("MESSAGE_SENT_ACTION"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (broadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+            broadcastReceiver = null;
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        myContext=(FragmentActivity) activity;
+        super.onAttach(activity);
+    }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {

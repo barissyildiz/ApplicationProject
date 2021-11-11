@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen15">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textViewVadeliHesap"
+            android:text="@string/vadelihesap"
+            style="@style/TextViewRecylerViewAccountItemName"
+            android:layout_alignParentStart="true"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recyclerViewImageViewStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen15"
+            android:layout_toRightOf="@+id/textViewVadeliHesap"
+            android:src="@drawable/ic_yellowstar" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_arrow"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/recyclerViewItemCustomerAccountNumber"
+        tools:text="hesapadı"
+        android:layout_marginTop="10dp"
+        style="@style/TextViewRecylerViewItemStandart"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/recyclerViewItemBranchNumber"
+            style="@style/TextViewRecylerViewItemStandart"
+            tools:text="şubeadı" />
+
+        <TextView
+            android:id="@+id/recyclerViewBranchPlace"
+            style="@style/TextViewRecylerViewItemStandart"
+            android:layout_marginStart="@dimen/dimen10"
+            android:layout_toEndOf="@+id/recyclerViewItemBranchNumber"
+            tools:text="ŞUBE YERİ" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen15">
+
+        <TextView
+            tools:text="KULLANILABİLİR BAKİYE"
+            style="@style/TextViewRecylerViewItemStandart"/>
+
+        <TextView
+            android:id="@+id/recyclerViewItemCustomerBalance"
+            style="@style/TextViewRecyclerViewItemCustomerBalance"
+            android:layout_marginRight="@dimen/dimen10"
+            android:layout_toStartOf="@+id/currency"
+            tools:text="3,40" />
+
+        <TextView
+            android:id="@+id/currency"
+            style="@style/TextViewRecylerViewItemCurrency"
+            android:layout_alignParentEnd="true"
+            tools:text="TL" />
+
+    </RelativeLayout>
+
+</LinearLayout>

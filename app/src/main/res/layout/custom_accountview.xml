@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutVadeliHesaplar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:padding="10dp">
+
+        <!--
+        <TextView
+            android:id="@+id/textViewVadeliHesapHeader"
+            style="@style/TextViewAccountView"
+            android:layout_alignParentStart="true"
+            android:text="@string/allAccountsName" />
+
+        <ImageView
+            android:id="@+id/recyclerViewDepositAccountArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_closearrow" />
+
+            -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewCostumerDepositAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen20"
+            android:layout_marginTop="-59dp"
+            android:layout_marginBottom="@dimen/dimen15"
+            android:background="@color/white"
+            android:visibility="visible"
+            tools:listitem="@layout/recylerview_item_deposit_account" />
+
+        <!--android:layout_below="@+id/textViewVadeliHesapHeader"-->
+
+
+    </RelativeLayout>
+
+    <!--
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutVadesizHesaplar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textViewVadesizHesapHeader"
+            style="@style/TextViewAccountView"
+            android:layout_alignParentStart="true"
+            android:text="@string/vadesizhesap" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_openarrow" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewCostumerCheckingAcount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewVadesizHesapHeader"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    -->
+
+</LinearLayout>

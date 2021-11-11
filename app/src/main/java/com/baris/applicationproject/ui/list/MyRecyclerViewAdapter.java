@@ -1,6 +1,5 @@
 package com.baris.applicationproject.ui.list;
 
-import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.baris.applicationproject.R;
 import com.baris.applicationproject.models.CustomerModel;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder> {
@@ -38,7 +35,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return new MyRecyclerViewAdapter.MyViewHolder(inflater.inflate(R.layout.recyclerview_item_list,parent,false));
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
@@ -48,10 +44,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         if(customerList.get(position).getGender().equalsIgnoreCase("ERKEK")) {
 
-            holder.linearLayout.setBackgroundColor(R.color.blue);
+            holder.linearLayout.setBackgroundColor(holder.linearLayout.getResources().getColor(R.color.blue));
         }else {
 
-            holder.linearLayout.setBackgroundColor(R.color.green);
+            holder.linearLayout.setBackgroundColor(holder.linearLayout.getResources().getColor(R.color.green));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

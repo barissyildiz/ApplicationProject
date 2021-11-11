@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <dimen name="dimen5">5sp</dimen>
+    <dimen name="dimen10">10sp</dimen>
+    <dimen name="dimen15">15sp</dimen>
+    <dimen name="dimen20">20sp</dimen>
+    <dimen name="dimen25">25sp</dimen>
+    <dimen name="dimen30">30sp</dimen>
+    <dimen name="dimen35">35sp</dimen>
+    <dimen name="dimen40">40sp</dimen>
+
+</resources>
