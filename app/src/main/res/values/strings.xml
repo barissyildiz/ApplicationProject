@@ -26,4 +26,5 @@
     <string name="selectPicture">Lütfen Resim Seçiniz</string>
     <string name="allAccountsName">VADELİ/VADESİZ HESAPLAR</string>
     <string name="selectAccount">HESAP SEÇİNİZ</string>
+    <string name="invalidPhoneNumber">TELEFON NUMARASI GEÇERSİZ</string>
 </resources>

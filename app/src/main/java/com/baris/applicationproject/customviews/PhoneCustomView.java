@@ -1,26 +1,47 @@
 package com.baris.applicationproject.customviews;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.baris.applicationproject.R;
 import com.google.android.material.textfield.TextInputEditText;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PhoneCustomView extends LinearLayout {
 
+    boolean isphoneNumberCompleted = false;
+
+    @BindView(R.id.phoneNumber)
     TextInputEditText phoneNumber;
+
+    //TextInputEditText phoneNumber;
     String lastphonenumbertext = "11";
+
+    public String getLastphonenumbertext() {
+        return lastphonenumbertext;
+    }
+
+    public void setLastphonenumbertext(String lastphonenumbertext) {
+        this.lastphonenumbertext = lastphonenumbertext;
+    }
 
     public String getPhoneText() {
 
-        return phoneNumber.getText().toString();
+        String phoneNumberr = phoneNumber.getText().toString();
+        return phoneNumberr;
     }
 
 
@@ -46,10 +67,11 @@ public class PhoneCustomView extends LinearLayout {
 
     private void init(Context context) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.custom_phone_inputview,this);
-        phoneNumber = view.findViewById(R.id.phoneNumber);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.sharedprefencesfile),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        //phoneNumber.setText("0325235232");
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_phone_inputview,this);
+        ButterKnife.bind(this);
 
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -66,6 +88,7 @@ public class PhoneCustomView extends LinearLayout {
             public void afterTextChanged(Editable editable) {
 
                 String text = phoneNumber.getText().toString();
+                lastphonenumbertext = editable.toString();
 
                 int  textLength = phoneNumber.getText().length();
                 if (text.endsWith("-") || text.endsWith(" ") || text.endsWith(" "))
@@ -75,6 +98,8 @@ public class PhoneCustomView extends LinearLayout {
                     {
                         phoneNumber.setText(new StringBuilder(text).insert(text.length() - 1, "0"+" (").toString());
                         phoneNumber.setSelection(phoneNumber.getText().length());
+                        editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                        editor.apply();
                     }
                 }
                 else if (textLength == 7)
@@ -83,12 +108,18 @@ public class PhoneCustomView extends LinearLayout {
                     {
                         phoneNumber.setText(new StringBuilder(text).insert(text.length() - 1, ")").toString());
                         phoneNumber.setSelection(phoneNumber.getText().length());
+                        editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                        editor.apply();
+
                     }
                 }
                 else if (textLength == 8)
                 {
                     phoneNumber.setText(new StringBuilder(text).insert(text.length() - 1, " ").toString());
                     phoneNumber.setSelection(phoneNumber.getText().length());
+                    editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                    editor.apply();
+
                 }
                 else if (textLength == 12)
                 {
@@ -96,6 +127,9 @@ public class PhoneCustomView extends LinearLayout {
                     {
                         phoneNumber.setText(new StringBuilder(text).insert(text.length() - 1, "-").toString());
                         phoneNumber.setSelection(phoneNumber.getText().length());
+                        editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                        editor.apply();
+
                     }
                 }
                 else if (textLength == 15)
@@ -104,17 +138,24 @@ public class PhoneCustomView extends LinearLayout {
                     {
                         phoneNumber.setText(new StringBuilder(text).insert(text.length() - 1, "-").toString());
                         phoneNumber.setSelection(phoneNumber.getText().length());
+                        editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                        editor.apply();
+
                     }
                 }
                 else if (textLength == 17) {
 
-                    lastphonenumbertext = phoneNumber.getText().toString();
+                    editor.putString("phoneNumber",phoneNumber.getText().toString());
+                    editor.apply();
+
                 }
                 else if (textLength == 18)
                 {
                     try {
                         phoneNumber.setText("");
                         phoneNumber.setError("GİRELEBİLECEK MAXİUMUM RAKAM SAYISI AŞILDI.");
+                        editor.putString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+                        editor.apply();
                     }catch (Exception e) {
                         e.printStackTrace();
                     }

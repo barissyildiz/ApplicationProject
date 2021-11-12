@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -112,7 +114,6 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @OnClick(R.id.fragmentTextViewCustomerAccount)
     public void openCustomerAccount() {
 
-        Toast.makeText(getContext(),"22",Toast.LENGTH_LONG).show();
         Fragment fragment = new CustomerAccountFragment();
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentHome, fragment).commit();
@@ -126,11 +127,19 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @OnClick(R.id.deneme)
     public void deneme() {
 
-        Toast.makeText(getContext(),phoneCustomView.getPhoneText(),Toast.LENGTH_LONG).show();
+        SharedPreferences sharedPreferences = myContext.getSharedPreferences(getResources().getString(R.string.sharedprefencesfile),Context.MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
+        if(phoneNumber.length() == 17) {
+            Toast.makeText(getContext(), phoneNumber, Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getContext(),getResources().getString(R.string.invalidPhoneNumber),Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.buttonCustomerİmage)
     public void buttonClick2() {
+
+        /*
 
             // create an instance of the
             // intent of the type image
@@ -142,6 +151,22 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
             // with the returned requestCode
 
             startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+
+         */
+
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        } else {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        }
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+
 
     }
 
@@ -159,18 +184,23 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
                 selectedImageUri = data.getData();
 
-                /*
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
                     imageViewCustomerPicture.setImageURI(selectedImageUri);
                 }
-
-                 */
                 final Uri uri = data.getData();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    final int takeFlags = data.getFlags()
+                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                }
 
                 Glide.with(this)
                         .load(new File(uri.getPath()))
                         .into(imageViewCustomerPicture);
+
             }
         }
     }
