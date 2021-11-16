@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,7 +73,8 @@ public class RecyclerViewAdapterCustomerDepositAccount extends RecyclerView.Adap
                  */
 
                 Context mContext = holder.textViewBranchName.getContext();
-                Fragment fragment = new CreateFormFragment();
+                //Fragment fragment = new CreateFormFragment();
+                Fragment fragment = ((FragmentActivity)mContext).getSupportFragmentManager().findFragmentByTag("createFragment");
                 Bundle bundle = new Bundle();
                 bundle.putString(customerAccountNumber,holder.textViewCustomerAccountNumber.getText().toString());
                 bundle.putString(branchNumber,holder.textViewBranchNumber.getText().toString());
@@ -83,6 +85,7 @@ public class RecyclerViewAdapterCustomerDepositAccount extends RecyclerView.Adap
 
                 ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentHome, fragment)
+                        //.addToBackStack("formFragment")
                         .commit();
 
                 /*

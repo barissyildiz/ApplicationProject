@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -71,17 +72,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     public boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = null;
+        String TAG = "";
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.menu_item_createlist) {
             fragment = new CreateFormFragment();
+            TAG = "createFragment";
         } else if (id == R.id.menu_item_showlist) {
             fragment = new ListFormFragment();
+            TAG = "listFragment";
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentHome, fragment).commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.fragmentHome,fragment,TAG);
+
+        if(TAG.equals("createFragment")) {
+            fragmentTransaction.addToBackStack("formFragment");
+        }else {
+            fragmentTransaction.addToBackStack(null);
+            //fragmentManager.popBackStackImmediate("createFragment",0);
+            fragmentManager.popBackStack();
+        }
+        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

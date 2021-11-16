@@ -2,7 +2,6 @@ package com.baris.applicationproject.ui.form;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -10,19 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,15 +24,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.baris.applicationproject.R;
-import com.baris.applicationproject.customviews.CustomerAccountView;
 import com.baris.applicationproject.customviews.PhoneCustomView;
 import com.baris.applicationproject.models.CustomerModel;
 import com.baris.applicationproject.ui.account.CustomerAccountFragment;
@@ -47,8 +38,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import net.rimoto.intlphoneinput.IntlPhoneInput;
-
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,7 +45,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class CreateFormFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
@@ -65,6 +53,8 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     String lastphonenumbertext = "11";
     String date;
     String gender = "";
+    View view;
+    boolean isLoaded = false;
     int SELECT_PICTURE = 200;
     Uri selectedImageUri;
     public static final int GALLERY_INTENT_CALLED = 1;
@@ -77,6 +67,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     String branchName = "branchName";
     String customerBalance = "customerBalance";
     String currency = "currency";
+    boolean isSavedCustomer = false;
 
     @BindView(R.id.datePickerBirthday)
     DatePicker datePicker;
@@ -107,6 +98,11 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
     @BindView(R.id.fragmentTextViewSelectedCustomerAccount)
     TextView textViewSelectedCustomerAccount;
+
+    @OnClick(R.id.fragmentTextViewContractPage)
+    public void openContractPage() {
+
+    }
 
     //@BindView(R.id.fragmentCustomerAccountView)
     //CustomerAccountView customerAccountView;
@@ -211,7 +207,9 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         if(textViewbirthday.getVisibility() == View.VISIBLE && !customerName.getText().toString().equalsIgnoreCase("") &&
                 !gender.isEmpty()) {
 
-            Toast.makeText(getContext(),gender,Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"KAYIT YAPILDI",Toast.LENGTH_LONG).show();
+            myContext.getSupportFragmentManager().popBackStackImmediate("formFragment",0);
+            myContext.getSupportFragmentManager().popBackStack();
             CustomerModel customerModel = new CustomerModel();
             customerModel.setCustomerName(customerName.getText().toString());
             customerModel.setCustomerBirthday(date);
@@ -259,24 +257,23 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         customerModelsList = gson.fromJson(json,type);
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(key,"1246");
+    //@Override
+    //public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+     //   super.onSaveInstanceState(savedInstanceState);
+     //   savedInstanceState.putString(key,"1246");
 
-    }
-
+    //}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_create_form,container,false);
+        if(isLoaded == false) {
 
-        if (savedInstanceState != null) {
-            Toast.makeText(getContext(),savedInstanceState.getString(key),Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(getContext(),"BOŞ",Toast.LENGTH_SHORT).show();
+            view = inflater.inflate(R.layout.fragment_create_form, container, false);
+            Toast.makeText(view.getContext(),"ACTİVİTY HAS BEEN CREATED",Toast.LENGTH_SHORT).show();
+            isLoaded = true;
         }
+
 
         return view;
     }
@@ -288,6 +285,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         ButterKnife.bind(this,view);
 
         takeArguments();
+        isSavedCustomer = false;
 
         phoneCustomView = new PhoneCustomView(view.getContext());
         radioGroupGender.setOnCheckedChangeListener(this);
@@ -434,6 +432,11 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         super.onAttach(activity);
         myContext=(FragmentActivity) activity;
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

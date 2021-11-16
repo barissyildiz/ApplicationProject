@@ -67,6 +67,16 @@
             android:background="@color/blue"/>
 
         <TextView
+            android:id="@+id/fragmentTextViewContractPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contractPage"
+            android:textSize="@dimen/dimen20"
+            android:textColor="@color/white"
+            android:background="@color/blue"
+            android:layout_marginTop="@dimen/dimen10"/>
+
+        <TextView
             android:id="@+id/fragmentTextViewSelectedCustomerAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
