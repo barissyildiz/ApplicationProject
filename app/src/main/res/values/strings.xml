@@ -27,5 +27,14 @@
     <string name="allAccountsName">VADELİ/VADESİZ HESAPLAR</string>
     <string name="selectAccount">HESAP SEÇİNİZ</string>
     <string name="invalidPhoneNumber">TELEFON NUMARASI GEÇERSİZ</string>
-    <string name="contractPage">SÖZLEŞME SAYFASI</string>
+    <string name="contractPage">SÖZLEŞMEYİ KABUL ETMEK İÇİN TIKLAYINIZ</string>
+    <string name="contactDetailText">6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel verilerinizin işlenmesinden
+        doğan haklarınıza ve konu hakkındaki detaylı bilgiye Bankamız Aydınlatma metninden ulaşabilirsiniz.</string>
+    <string name="bringContractPageText">KVKK Aydınlatma Metnini Okudum.</string>
+    <string name="contractBiometricText">BİYOMETRİK VERİ</string>
+    <string name="bringContractPageBiometricDataConfirmation">"Müşteri Olma hizmetimizden faydalanabilmeniz için,6698 Sayılı Kişisel Verilerin Korunması Kanununun 6.maddesine göre özel nitelikli veriniz olan yüz izleriniz işlenecektir. \n Hizmetimizden faydalanabilmeniz için özel nitelikli biyometrik verinizin Bankamızca işlenmesine açık rızanızı rica ederiz."</string>
+    <string name="contractPageConfirmationActive">ONAYLA</string>
+    <string name="contractPageConfirmationPassive">VAZGEÇ</string>
+    <string name="contractPageSwitchCheckText">SÖZLEŞME ONAYI İÇİN KVKK METNİNİ VE BİYOMETRİK VERİYİ KABUL ETMENİZ GEREKMEKTEDİR.</string>
+    <string name="contractPageSwitchCheckAccept">TAMAM</string>
 </resources>

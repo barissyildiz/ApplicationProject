@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.4510416666666667" />
+        <entry key="app/src/main/res/drawable/contract_item_custom_background.xml" value="0.3851851851851852" />
         <entry key="app/src/main/res/drawable/ic__15801_settings_icon.xml" value="0.440625" />
         <entry key="app/src/main/res/drawable/ic_arrow.xml" value="0.440625" />
         <entry key="app/src/main/res/drawable/ic_closearrow.xml" value="0.440625" />
@@ -17,6 +18,7 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.25625" />
         <entry key="app/src/main/res/layout/custom_accountview.xml" value="0.3854166666666667" />
         <entry key="app/src/main/res/layout/custom_phone_inputview.xml" value="0.3854166666666667" />
+        <entry key="app/src/main/res/layout/fragment_contract.xml" value="0.3958333333333333" />
         <entry key="app/src/main/res/layout/fragment_create_form.xml" value="0.3072916666666667" />
         <entry key="app/src/main/res/layout/fragment_customer_account.xml" value="0.4107789855072464" />
         <entry key="app/src/main/res/layout/fragment_list_form.xml" value="0.3072916666666667" />

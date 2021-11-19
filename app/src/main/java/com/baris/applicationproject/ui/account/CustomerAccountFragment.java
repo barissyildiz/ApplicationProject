@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +48,9 @@ public class CustomerAccountFragment extends Fragment {
         setAdapter();
         recyclerViewAdapterCustomerDepositAccount = new RecyclerViewAdapterCustomerDepositAccount(accountModels);
         recyclerViewCustomerAccount.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewCustomerAccount.getContext(),LinearLayoutManager.VERTICAL);
         recyclerViewCustomerAccount.setAdapter(recyclerViewAdapterCustomerDepositAccount);
+        recyclerViewCustomerAccount.addItemDecoration(dividerItemDecoration);
 
     }
 

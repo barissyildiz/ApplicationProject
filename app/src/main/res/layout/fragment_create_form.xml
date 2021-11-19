@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
             android:id="@+id/buttonBirthay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
             android:text="@string/button_birthday" />
 
         <TextView
@@ -46,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@color/purple_500"
+            android:backgroundTint="@color/blue"
             android:text="@string/selectPicture"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -61,31 +62,44 @@
             android:id="@+id/fragmentTextViewCustomerAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/selectAccount"
-            android:textSize="@dimen/dimen20"
-            android:textColor="@color/white"
-            android:background="@color/blue"/>
-
-        <TextView
-            android:id="@+id/fragmentTextViewContractPage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/contractPage"
-            android:textSize="@dimen/dimen20"
-            android:textColor="@color/white"
             android:background="@color/blue"
-            android:layout_marginTop="@dimen/dimen10"/>
+            android:text="@string/selectAccount"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen20" />
 
         <TextView
             android:id="@+id/fragmentTextViewSelectedCustomerAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text ="SEÇİLEN HESAP"
-            android:textSize="@dimen/dimen20"
-            android:textColor="@color/white"
-            android:background="@color/blue"
             android:layout_marginTop="@dimen/dimen10"
-            android:visibility="gone"/>
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen20"
+            android:visibility="gone"
+            tools:text="SEÇİLEN HESAP" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkboxContractPageCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/fragmentTextViewContractPage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen10"
+                android:background="@color/blue"
+                android:text="@string/contractPage"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen20" />
+
+        </LinearLayout>
 
         <RadioGroup
             android:id="@+id/radioGroup"

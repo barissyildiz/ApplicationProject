@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -33,6 +34,7 @@ import com.baris.applicationproject.R;
 import com.baris.applicationproject.customviews.PhoneCustomView;
 import com.baris.applicationproject.models.CustomerModel;
 import com.baris.applicationproject.ui.account.CustomerAccountFragment;
+import com.baris.applicationproject.ui.contract.ContractFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -62,12 +64,13 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     private FragmentActivity myContext;
     BroadcastReceiver broadcastReceiver;
     String key = "customer";
-    String customerAccountNumber = "customerAccountNumber";
+    static final String KEY_CUSTOMER_ACCOUNT_NUMBER = "customerAccountNumber";
     String branchNumber = "branchNumber";
     String branchName = "branchName";
     String customerBalance = "customerBalance";
     String currency = "currency";
     boolean isSavedCustomer = false;
+    boolean isContractActivated = false;
 
     @BindView(R.id.datePickerBirthday)
     DatePicker datePicker;
@@ -99,9 +102,15 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @BindView(R.id.fragmentTextViewSelectedCustomerAccount)
     TextView textViewSelectedCustomerAccount;
 
+    @BindView(R.id.checkboxContractPageCheck)
+    CheckBox checkBoxContractPageCheck;
+
     @OnClick(R.id.fragmentTextViewContractPage)
     public void openContractPage() {
 
+        Fragment fragment = new ContractFragment();
+        FragmentManager fragmentManager = myContext.getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragmentHome, fragment).commit();
     }
 
     //@BindView(R.id.fragmentCustomerAccountView)
@@ -123,12 +132,12 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @OnClick(R.id.deneme)
     public void deneme() {
 
-        SharedPreferences sharedPreferences = myContext.getSharedPreferences(getResources().getString(R.string.sharedprefencesfile),Context.MODE_PRIVATE);
-        String phoneNumber = sharedPreferences.getString("phoneNumber",getResources().getString(R.string.invalidPhoneNumber));
-        if(phoneNumber.length() == 17) {
+        SharedPreferences sharedPreferences = myContext.getSharedPreferences(getResources().getString(R.string.sharedprefencesfile), Context.MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber", getResources().getString(R.string.invalidPhoneNumber));
+        if (phoneNumber.length() == 17) {
             Toast.makeText(getContext(), phoneNumber, Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(getContext(),getResources().getString(R.string.invalidPhoneNumber),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.invalidPhoneNumber), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -161,7 +170,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
 
 
     }
@@ -204,11 +213,11 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @OnClick(R.id.formSave)
     public void checkForm2() {
 
-        if(textViewbirthday.getVisibility() == View.VISIBLE && !customerName.getText().toString().equalsIgnoreCase("") &&
+        if (textViewbirthday.getVisibility() == View.VISIBLE && !customerName.getText().toString().equalsIgnoreCase("") &&
                 !gender.isEmpty()) {
 
-            Toast.makeText(getContext(),"KAYIT YAPILDI",Toast.LENGTH_LONG).show();
-            myContext.getSupportFragmentManager().popBackStackImmediate("formFragment",0);
+            Toast.makeText(getContext(), "KAYIT YAPILDI", Toast.LENGTH_LONG).show();
+            myContext.getSupportFragmentManager().popBackStackImmediate("formFragment", 0);
             myContext.getSupportFragmentManager().popBackStack();
             CustomerModel customerModel = new CustomerModel();
             customerModel.setCustomerName(customerName.getText().toString());
@@ -218,16 +227,15 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
             customerModel.setCustomerPicture(selectedImageUri.toString());
             loadData();
             saveData(customerModel);
-        }
-        else {
+        } else {
 
-            Toast.makeText(getContext(),getResources().getString(R.string.fillingoutform),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getResources().getString(R.string.fillingoutform), Toast.LENGTH_LONG).show();
         }
     }
 
     public void saveData(CustomerModel customerModel) {
 
-        if(customerModelsList == null) {
+        if (customerModelsList == null) {
 
             customerModelsList = new ArrayList<>();
         }
@@ -236,41 +244,34 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(customerModelsList);
-        editor.putString(getResources().getString(R.string.sharedpreferenceskey),json);
+        editor.putString(getResources().getString(R.string.sharedpreferenceskey), json);
         editor.apply();
 
     }
 
     public void loadData() {
 
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getResources().getString(R.string.sharedprefencesfile),Context.MODE_PRIVATE);
-        String json = sharedPreferences.getString(getResources().getString(R.string.sharedpreferenceskey),null);
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getResources().getString(R.string.sharedprefencesfile), Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(getResources().getString(R.string.sharedpreferenceskey), null);
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<CustomerModel>>() {
 
         }.getType();
 
-        if(customerModelsList == null) {
+        if (customerModelsList == null) {
 
             customerModelsList = new ArrayList<>();
         }
-        customerModelsList = gson.fromJson(json,type);
+        customerModelsList = gson.fromJson(json, type);
     }
-
-    //@Override
-    //public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-     //   super.onSaveInstanceState(savedInstanceState);
-     //   savedInstanceState.putString(key,"1246");
-
-    //}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        if(isLoaded == false) {
+        if (!isLoaded) {
 
             view = inflater.inflate(R.layout.fragment_create_form, container, false);
-            Toast.makeText(view.getContext(),"ACTİVİTY HAS BEEN CREATED",Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "ACTİVİTY HAS BEEN CREATED", Toast.LENGTH_SHORT).show();
             isLoaded = true;
         }
 
@@ -282,9 +283,12 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         takeArguments();
+        checkContractPageCheck();
+        checkBoxContractPageCheck.setChecked(isContractActivated);
+
         isSavedCustomer = false;
 
         phoneCustomView = new PhoneCustomView(view.getContext());
@@ -295,7 +299,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
                 @Override
                 public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
 
-                    date = i2+ "."+i1+"."+i;
+                    date = i2 + "." + i1 + "." + i;
                     datePicker.setVisibility(View.GONE);
                     String birthdaytext = getResources().getString(R.string.birthday) + date;
                     textViewbirthday.setText(birthdaytext);
@@ -382,18 +386,26 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
          */
     }
 
+    private void checkContractPageCheck() {
+
+        checkBoxContractPageCheck.setChecked(isContractActivated);
+
+    }
+
     private void takeArguments() {
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
-            String customerAccountNumberr = bundle.getString(customerAccountNumber);
+        if (bundle != null) {
+            String customerAccountNumberr = bundle.getString(KEY_CUSTOMER_ACCOUNT_NUMBER);
             String branchNumberr = bundle.getString(branchNumber);
             String branchNamee = bundle.getString(branchName);
             String balancee = bundle.getString(customerBalance);
             String currencyy = bundle.getString(currency);
 
             textViewSelectedCustomerAccount.setVisibility(View.VISIBLE);
-            textViewSelectedCustomerAccount.setText(branchNamee + "/" +balancee +currencyy);
+            textViewSelectedCustomerAccount.setText(branchNamee + "/" + balancee + currencyy);
+
+            isContractActivated = bundle.getBoolean("isContractActivated");
 
         }
     }
@@ -409,7 +421,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
                 Bundle bundle = intent.getExtras();
                 String message = bundle.getString("MESSAGE");
 
-                Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
             }
 
         };
@@ -430,7 +442,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        myContext=(FragmentActivity) activity;
+        myContext = (FragmentActivity) activity;
         super.onAttach(activity);
     }
 
@@ -442,13 +454,13 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-        if(radioGroup.getId() == R.id.radioGroup) {
+        if (radioGroup.getId() == R.id.radioGroup) {
 
-            if(radioGroupGender.getCheckedRadioButtonId() == R.id.radioMale) {
+            if (radioGroupGender.getCheckedRadioButtonId() == R.id.radioMale) {
 
                 gender = getResources().getString(R.string.male);
 
-            }else if(radioGroupGender.getCheckedRadioButtonId() == R.id.radioFemale) {
+            } else if (radioGroupGender.getCheckedRadioButtonId() == R.id.radioFemale) {
 
                 gender = getResources().getString(R.string.female);
             }
