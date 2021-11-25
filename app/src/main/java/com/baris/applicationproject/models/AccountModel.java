@@ -1,12 +1,19 @@
 package com.baris.applicationproject.models;
 
-public class AccountModel {
+import java.io.Serializable;
+
+public class AccountModel implements Serializable {
 
     int customerAccountNumber;
     String branchName;
     int branchNumber;
     int balanceOfTheAccount;
     String currency;
+
+    public AccountModel() {
+
+
+    }
 
     public AccountModel(int customerAccountNumber,String branchName,int branchNumber,int balanceOfTheAccount,String currency) {
         this.customerAccountNumber = customerAccountNumber;

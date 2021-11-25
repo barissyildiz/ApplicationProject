@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blue"
+            android:layout_marginTop="@dimen/dimen10"
             android:text="@string/selectAccount"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen20" />
@@ -133,18 +134,21 @@
             android:orientation="horizontal">
 
             <CheckBox
+                android:id="@+id/depositAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/vadelihesap" />
 
             <CheckBox
+                android:id="@+id/checkingAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/vadesizhesap" />
 
             <CheckBox
+                android:id="@+id/fundAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -158,12 +162,14 @@
             android:orientation="horizontal">
 
             <CheckBox
+                android:id="@+id/dollarGoldAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/altındövizhesabı" />
 
             <CheckBox
+                android:id="@+id/savingsAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -37,4 +37,13 @@
     <string name="contractPageConfirmationPassive">VAZGEÇ</string>
     <string name="contractPageSwitchCheckText">SÖZLEŞME ONAYI İÇİN KVKK METNİNİ VE BİYOMETRİK VERİYİ KABUL ETMENİZ GEREKMEKTEDİR.</string>
     <string name="contractPageSwitchCheckAccept">TAMAM</string>
+    <string name="confirmationPageCustomerNameandSurname">AD SOYAD</string>
+    <string name="confirmationPageCustomerBirthday">DOĞUM TARİHİ</string>
+    <string name="confirmationPageCustomerGender">CİNSİYET</string>
+    <string name="confirmationPageCustomerPicture">PROFİL RESMİ</string>
+    <string name="confirmationPageCustomerPhoneNumber">TELEFON NUMARASI</string>
+    <string name="confirmationPageCustomerAccountInfo">HESAP BİLGİLERİ</string>
+    <string name="confirmationPageCustomerAccountType">HESAP TİPİ</string>
+    <string name="confirmationPageCustomerFinish">ONAYLA</string>
+    <string name="confirmationPageCustomerGiveup">VAZGEÇ</string>
 </resources>

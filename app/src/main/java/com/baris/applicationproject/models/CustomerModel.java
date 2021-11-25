@@ -2,7 +2,9 @@ package com.baris.applicationproject.models;
 
 import android.net.Uri;
 
-public class CustomerModel {
+import java.io.Serializable;
+
+public class CustomerModel implements Serializable {
 
     String customerName;
     String customerBirthday;

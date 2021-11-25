@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -32,8 +33,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.baris.applicationproject.R;
 import com.baris.applicationproject.customviews.PhoneCustomView;
+import com.baris.applicationproject.models.AccountModel;
 import com.baris.applicationproject.models.CustomerModel;
 import com.baris.applicationproject.ui.account.CustomerAccountFragment;
+import com.baris.applicationproject.ui.confirm.ConfirmationFragment;
 import com.baris.applicationproject.ui.contract.ContractFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
@@ -41,17 +44,23 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateFormFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class CreateFormFragment extends Fragment implements RadioGroup.OnCheckedChangeListener{
 
     PhoneCustomView phoneCustomView;
     ArrayList<CustomerModel> customerModelsList;
+    AccountModel accountModel;
+    ArrayList<String> accountTypes;
     String lastphonenumbertext = "11";
     String date;
     String gender = "";
@@ -64,13 +73,18 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     private FragmentActivity myContext;
     BroadcastReceiver broadcastReceiver;
     String key = "customer";
-    static final String KEY_CUSTOMER_ACCOUNT_NUMBER = "customerAccountNumber";
+    public static final String KEY_CUSTOMER_ACCOUNT_NUMBER = "customerAccountNumber";
     String branchNumber = "branchNumber";
     String branchName = "branchName";
     String customerBalance = "customerBalance";
     String currency = "currency";
+    public static final String KEY_CUSTOMER_INFO = "customerInfo";
+    public static final String KEY_CUSTOMER_ACCOUNT_INFO = "customerAccountInfo";
+    public static final String KEY_CUSTOMER_ACCOUNT_TYPES = "customerAccountTypes";
     boolean isSavedCustomer = false;
     boolean isContractActivated = false;
+    //When we transfer datas to ConfirmationPage , picture of costumer needs to be guaranteed to select in galeria by customer
+    boolean isCostumerPictureActive = false;
 
     @BindView(R.id.datePickerBirthday)
     DatePicker datePicker;
@@ -105,6 +119,21 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @BindView(R.id.checkboxContractPageCheck)
     CheckBox checkBoxContractPageCheck;
 
+    @BindView(R.id.depositAccount)
+    CheckBox checkBoxDepositAccount;
+
+    @BindView(R.id.checkingAccount)
+    CheckBox checkBoxCheckingAccount;
+
+    @BindView(R.id.fundAccount)
+    CheckBox checkBoxFundAccount;
+
+    @BindView(R.id.dollarGoldAccount)
+    CheckBox checkBoxDollarGoldAccount;
+
+    @BindView(R.id.savingsAccount)
+    CheckBox checkBoxSavingsAccount;
+
     @OnClick(R.id.fragmentTextViewContractPage)
     public void openContractPage() {
 
@@ -112,9 +141,6 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentHome, fragment).commit();
     }
-
-    //@BindView(R.id.fragmentCustomerAccountView)
-    //CustomerAccountView customerAccountView;
 
     @OnClick(R.id.fragmentTextViewCustomerAccount)
     public void openCustomerAccount() {
@@ -144,21 +170,6 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     @OnClick(R.id.buttonCustomerİmage)
     public void buttonClick2() {
 
-        /*
-
-            // create an instance of the
-            // intent of the type image
-            Intent i = new Intent();
-            i.setType("image/*");
-            i.setAction(Intent.ACTION_OPEN_DOCUMENT);
-
-            // pass the constant to compare it
-            // with the returned requestCode
-
-            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
-
-         */
-
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -175,7 +186,7 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
     }
 
-    @SuppressLint("WrongConstant")
+    @SuppressLint({"WrongConstant", "ObsoleteSdkInt"})
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -187,24 +198,34 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
             if (requestCode == SELECT_PICTURE) {
                 // Get the url of the image from data
 
-                selectedImageUri = data.getData();
+                if (data != null) {
+                    selectedImageUri = data.getData();
+                }
 
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
                     imageViewCustomerPicture.setImageURI(selectedImageUri);
+                    isCostumerPictureActive = true;
                 }
+
+                /*
+
                 final Uri uri = data.getData();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     final int takeFlags = data.getFlags()
                             & (Intent.FLAG_GRANT_READ_URI_PERMISSION
                             | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    getContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                    requireContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
                 }
 
-                Glide.with(this)
-                        .load(new File(uri.getPath()))
-                        .into(imageViewCustomerPicture);
+                if (uri != null) {
+                    Glide.with(this)
+                            .load(new File(uri.getPath()))
+                            .into(imageViewCustomerPicture);
+                }
+
+                 */
 
             }
         }
@@ -214,9 +235,27 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
     public void checkForm2() {
 
         if (textViewbirthday.getVisibility() == View.VISIBLE && !customerName.getText().toString().equalsIgnoreCase("") &&
-                !gender.isEmpty()) {
+                !gender.isEmpty() && isCostumerPictureActive && textViewSelectedCustomerAccount.getVisibility() == View.VISIBLE &&
+                checkBoxContractPageCheck.isChecked() && phonenumber.getText().toString().length() == 17) {
 
-            Toast.makeText(getContext(), "KAYIT YAPILDI", Toast.LENGTH_LONG).show();
+            addAccountTypes();
+
+            CustomerModel customerModel = new CustomerModel();
+            customerModel.setCustomerName(customerName.getText().toString());
+            customerModel.setCustomerBirthday(date);
+            customerModel.setGender(gender);
+            customerModel.setCustomerphonenumber(phonenumber.getText().toString());
+            customerModel.setCustomerPicture(selectedImageUri.toString());
+
+            Fragment fragment = new ConfirmationFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(KEY_CUSTOMER_INFO, customerModel);
+            bundle.putSerializable(KEY_CUSTOMER_ACCOUNT_INFO, accountModel);
+            bundle.putStringArrayList(KEY_CUSTOMER_ACCOUNT_TYPES,accountTypes);
+            fragment.setArguments(bundle);
+            myContext.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHome, fragment).commit();
+
+            /*
             myContext.getSupportFragmentManager().popBackStackImmediate("formFragment", 0);
             myContext.getSupportFragmentManager().popBackStack();
             CustomerModel customerModel = new CustomerModel();
@@ -227,9 +266,30 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
             customerModel.setCustomerPicture(selectedImageUri.toString());
             loadData();
             saveData(customerModel);
+
+             */
         } else {
 
             Toast.makeText(getContext(), getResources().getString(R.string.fillingoutform), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addAccountTypes() {
+
+        if(checkBoxDepositAccount.isChecked()) {
+            accountTypes.add(checkBoxDepositAccount.getText().toString());
+        }
+        if(checkBoxCheckingAccount.isChecked()) {
+            accountTypes.add(checkBoxCheckingAccount.getText().toString());
+        }
+        if(checkBoxFundAccount.isChecked()) {
+            accountTypes.add(checkBoxFundAccount.getText().toString());
+        }
+        if(checkBoxDollarGoldAccount.isChecked()) {
+            accountTypes.add(checkBoxDollarGoldAccount.getText().toString());
+        }
+        if(checkBoxSavingsAccount.isChecked()) {
+            accountTypes.add(checkBoxSavingsAccount.getText().toString());
         }
     }
 
@@ -287,103 +347,31 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
         takeArguments();
         checkContractPageCheck();
+        accountTypes = new ArrayList<>();
         checkBoxContractPageCheck.setChecked(isContractActivated);
 
         isSavedCustomer = false;
 
         phoneCustomView = new PhoneCustomView(view.getContext());
         radioGroupGender.setOnCheckedChangeListener(this);
+        //checkBoxDepositAccount.setOnCheckedChangeListener(this);
+        //checkBoxCheckingAccount.setOnCheckedChangeListener(this);
+        //checkBoxFundAccount.setOnCheckedChangeListener(this);
+        //checkBoxDollarGoldAccount.setOnCheckedChangeListener(this);
+        //checkBoxDollarGoldAccount.setOnCheckedChangeListener(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
+            datePicker.setOnDateChangedListener((datePicker, i, i1, i2) -> {
 
-                    date = i2 + "." + i1 + "." + i;
-                    datePicker.setVisibility(View.GONE);
-                    String birthdaytext = getResources().getString(R.string.birthday) + date;
-                    textViewbirthday.setText(birthdaytext);
-                    textViewbirthday.setVisibility(View.VISIBLE);
+                date = i2 + "." + i1 + "." + i;
+                datePicker.setVisibility(View.GONE);
+                String birthdaytext = getResources().getString(R.string.birthday) + date;
+                textViewbirthday.setText(birthdaytext);
+                textViewbirthday.setVisibility(View.VISIBLE);
 
-                }
             });
         }
 
-        /*
-        phonenumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                String text = phonenumber.getText().toString();
-
-                int  textLength = phonenumber.getText().length();
-                if (text.endsWith("-") || text.endsWith(" ") || text.endsWith(" "))
-                    return;
-                if (textLength == 1) {
-                    if (!text.contains("("))
-                    {
-                        phonenumber.setText(new StringBuilder(text).insert(text.length() - 1, "0"+" (").toString());
-                        phonenumber.setSelection(phonenumber.getText().length());
-                    }
-                }
-                else if (textLength == 7)
-                {
-                    if (!text.contains(")"))
-                    {
-                        phonenumber.setText(new StringBuilder(text).insert(text.length() - 1, ")").toString());
-                        phonenumber.setSelection(phonenumber.getText().length());
-                    }
-                }
-                else if (textLength == 8)
-                {
-                    phonenumber.setText(new StringBuilder(text).insert(text.length() - 1, " ").toString());
-                    phonenumber.setSelection(phonenumber.getText().length());
-                }
-                else if (textLength == 12)
-                {
-                    if (!text.contains("-"))
-                    {
-                        phonenumber.setText(new StringBuilder(text).insert(text.length() - 1, "-").toString());
-                        phonenumber.setSelection(phonenumber.getText().length());
-                    }
-                }
-                else if (textLength == 15)
-                {
-                    if (text.contains("-"))
-                    {
-                        phonenumber.setText(new StringBuilder(text).insert(text.length() - 1, "-").toString());
-                        phonenumber.setSelection(phonenumber.getText().length());
-                    }
-                }
-                else if (textLength == 17) {
-
-                    lastphonenumbertext = phonenumber.getText().toString();
-                }
-                else if (textLength == 18)
-                {
-                    try {
-                        phonenumber.setText("");
-                        phonenumber.setError("GİRELEBİLECEK MAXİUMUM RAKAM SAYISI AŞILDI.");
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        });
-
-         */
     }
 
     private void checkContractPageCheck() {
@@ -396,17 +384,23 @@ public class CreateFormFragment extends Fragment implements RadioGroup.OnChecked
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            String customerAccountNumberr = bundle.getString(KEY_CUSTOMER_ACCOUNT_NUMBER);
-            String branchNumberr = bundle.getString(branchNumber);
-            String branchNamee = bundle.getString(branchName);
-            String balancee = bundle.getString(customerBalance);
-            String currencyy = bundle.getString(currency);
 
-            textViewSelectedCustomerAccount.setVisibility(View.VISIBLE);
-            textViewSelectedCustomerAccount.setText(branchNamee + "/" + balancee + currencyy);
+            if (bundle.getString(KEY_CUSTOMER_ACCOUNT_NUMBER) != null) {
 
-            isContractActivated = bundle.getBoolean("isContractActivated");
+                String customerAccountNumberr = bundle.getString(KEY_CUSTOMER_ACCOUNT_NUMBER);
+                String branchNumberr = bundle.getString(branchNumber);
+                String branchNamee = bundle.getString(branchName);
+                String balancee = bundle.getString(customerBalance);
+                String currencyy = bundle.getString(currency);
+                accountModel = new AccountModel(Integer.parseInt(customerAccountNumberr), branchNamee, Integer.parseInt(branchNumberr), Integer.parseInt(balancee), currencyy);
 
+
+                textViewSelectedCustomerAccount.setVisibility(View.VISIBLE);
+                textViewSelectedCustomerAccount.setText(branchNamee + "/" + balancee + currencyy);
+            }
+            if (bundle.getString("isContractActivated") != null) {
+                isContractActivated = bundle.getBoolean("isContractActivated");
+            }
         }
     }
 
